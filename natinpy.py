@@ -11,30 +11,24 @@ import json
 #http://www.ni.com/en-us/shop/select/pxi-chassis
 
 
-
-class CompactRIO:
-
-	def getCompactRIO(self):
-		return
-
 class PCBasedSystems:
 	def __init__(self):
 		return
 
 class PXIChassis:
 	def __init__(self,group):
-		self.name = group
-		self.info = (group["attrHeadInfo"][0]["attributeVals"][0] if group is not None else None)
+		self.name = group["modelName"]
+		self.info = group
 
 class PXIController:
 	def __init__(self,group):
-		self.name = group
-		self.info = (group["attrHeadInfo"][0]["attributeVals"][0] if group is not None else None)
+		self.name = group["modelName"]
+		self.info = group
 
 class PXIModule:
 	def __init__(self,group):
-		self.name = group
-		self.info = (group["attrHeadInfo"][0]["attributeVals"][0] if group is not None else None)
+		self.name = group["modelName"]
+		self.info = group
 
 class PXI:
 
@@ -62,25 +56,8 @@ class PXI:
 				for item in d["tableItems"]:
 					if item["modelName"] == controllerName:
 						#print(d["attrHeadInfo"])
-						metadata = d
+						metadata = item
 						# print(item["modelName"])
-						downloadable = False
-						if "pdf" in item["techDocs"]:
-							manual = requests.get(item["techDocs"])
-							downloadable = True
-						else:
-							search_response = requests.get("http://www.ni.com" + item["techDocs"], timeout=5)
-							search_content = bs4.BeautifulSoup(search_response.content, "html.parser")
-							links = search_content.findAll("a")
-							for link in links:
-								if "User Manual and Specifications" in link.text:
-									manual = requests.get(link["href"])
-									downloadable = True
-						if downloadable:
-							with open(item["modelName"] + ";Data.pdf", "wb") as f:
-								f.write(manual.content)
-						else:
-							print("Sorry, there's currently no datasheet on the website for "+controllerName+"!")
 		return PXIController(metadata)
 
 	def getChassis(self, controllerName):
@@ -106,30 +83,10 @@ class PXI:
 				d = json.loads(controllerDict)	# Creates dictionary of table info for current PXI Chasis type
 				for item in d["tableItems"]:
 					if item["modelName"] == controllerName:
-						#print(d["attrHeadInfo"])
-						metadata = d
+						print(d["attrHeadInfo"])
+						metadata = item
 						# print(item["modelName"])
-						downloadable = False
-						if "pdf" in item["techDocs"]:
-							manual = requests.get(item["techDocs"])
-							downloadable = True
-						else:
-							search_response = requests.get("http://www.ni.com" + item["techDocs"], timeout=5)
-							search_content = bs4.BeautifulSoup(search_response.content, "html.parser")
-							links = search_content.findAll("a")
-							for link in links:
-								if "User Manual and Specifications" in link.text:
-									manual = requests.get(link["href"])
-									downloadable = True
-						if downloadable:
-							with open(item["modelName"] + ";Data.pdf", "wb") as f:
-								f.write(manual.content)
-						else:
-							print("Sorry, there's currently no datasheet on the website for "+controllerName+"!")
 		return PXIChassis(metadata)
-
-
-
 
 	def getModule(self, controllerName):
 		metadata = None
@@ -156,7 +113,7 @@ class PXI:
 				for item in d["tableItems"]:
 					if item["modelName"] == controllerName:
 						print(d["attrHeadInfo"])
-						metadata = d
+						metadata = item
 						downloadable = False
 						if "pdf" in item["techDocs"]:
 							manual = requests.get(item["techDocs"])
@@ -179,18 +136,18 @@ class PXI:
 
 class CompactRIOController:
 	def __init__(self,group):
-		self.name = group
-		self.info = (group["attrHeadInfo"][0]["attributeVals"][0] if group is not None else None)
+		self.name = group["modelName"]
+		self.info = group
 
 class CompactRIOChassis:
 	def __init__(self,group):
-		self.name = group
-		self.info = (group["attrHeadInfo"][0]["attributeVals"][0] if group is not None else None)
+		self.name = group["modelName"]
+		self.info = group
 
 class CompactRIOModule:
 	def __init__(self,group):
-		self.name = group
-		self.info = (group["attrHeadInfo"][0]["attributeVals"][0] if group is not None else None)
+		self.name = group["modelName"]
+		self.info = group
 
 class CompactRIO:
 
@@ -221,25 +178,8 @@ class CompactRIO:
 				for item in d["tableItems"]:
 					if item["modelName"] == controllerName:
 						#print(d["attrHeadInfo"])
-						metadata = d
+						metadata = item
 						# print(item["modelName"])
-						downloadable = False
-						if "pdf" in item["techDocs"]:
-							manual = requests.get(item["techDocs"])
-							downloadable = True
-						else:
-							search_response = requests.get("http://www.ni.com" + item["techDocs"], timeout=5)
-							search_content = bs4.BeautifulSoup(search_response.content, "html.parser")
-							links = search_content.findAll("a")
-							for link in links:
-								if "User Manual and Specifications" in link.text or "User Guide" in link.text:
-									manual = requests.get(link["href"])
-									downloadable = True
-						if downloadable:
-							with open(item["modelName"] + ";Data.pdf", "wb") as f:
-								f.write(manual.content)
-						else:
-							print("Sorry, there's currently no datasheet on the website for "+controllerName+"!")
 		return CompactRIOController(metadata)
 
 	def getChassis(self, controllerName):
@@ -267,25 +207,8 @@ class CompactRIO:
 				for item in d["tableItems"]:
 					if item["modelName"] == controllerName:
 						#print(d["attrHeadInfo"])
-						metadata = d
+						metadata = item
 						# print(item["modelName"])
-						downloadable = False
-						if "pdf" in item["techDocs"]:
-							manual = requests.get(item["techDocs"])
-							downloadable = True
-						else:
-							search_response = requests.get("http://www.ni.com" + item["techDocs"], timeout=5)
-							search_content = bs4.BeautifulSoup(search_response.content, "html.parser")
-							links = search_content.findAll("a")
-							for link in links:
-								if "User Manual and Specifications" in link.text:
-									manual = requests.get(link["href"])
-									downloadable = True
-						if downloadable:
-							with open(item["modelName"] + ";Data.pdf", "wb") as f:
-								f.write(manual.content)
-						else:
-							print("Sorry, there's currently no datasheet on the website for "+controllerName+"!")
 		return CompactRIOChassis(metadata)
 
 
@@ -314,42 +237,25 @@ class CompactRIO:
 				for item in d["tableItems"]:
 					if item["modelName"] == controllerName:
 						#print(d["attrHeadInfo"])
-						metadata = d
+						metadata  = item
 						# print(item["modelName"])
-						downloadable = False
-						if "pdf" in item["techDocs"]:
-							manual = requests.get(item["techDocs"])
-							downloadable = True
-						else:
-							search_response = requests.get("http://www.ni.com" + item["techDocs"], timeout=5)
-							search_content = bs4.BeautifulSoup(search_response.content, "html.parser")
-							links = search_content.findAll("a")
-							for link in links:
-								if "User Manual and Specifications" in link.text:
-									manual = requests.get(link["href"])
-									downloadable = True
-						if downloadable:
-							with open(item["modelName"] + ";Data.pdf", "wb") as f:
-								f.write(manual.content)
-						else:
-							print("Sorry, there's currently no datasheet on the website for "+controllerName+"!")
 		return CompactRIOModule(metadata)
 
 
 class CompactDAQController:
 	def __init__(self,group):
-		self.name = group
-		self.info = (group["attrHeadInfo"][0]["attributeVals"][0] if group is not None else None)
+		self.name = group["modelName"]
+		self.info = group
 
 class CompactDAQChassis:
 	def __init__(self,group):
-		self.name = group
-		self.info = (group["attrHeadInfo"][0]["attributeVals"][0] if group is not None else None)
+		self.name = group["modelName"]
+		self.info = group
 
 class CompactDAQModule:
 	def __init__(self,group):
-		self.name = group
-		self.info = (group["attrHeadInfo"][0]["attributeVals"][0] if group is not None else None)
+		self.name = group["modelName"]
+		self.info = group
 
 
 class CompactDAQ:
@@ -378,25 +284,8 @@ class CompactDAQ:
 				for item in d["tableItems"]:
 					if item["modelName"] == controllerName:
 						#print(d["attrHeadInfo"])
-						metadata = d
+						metadata = item
 						# print(item["modelName"])
-						downloadable = False
-						if "pdf" in item["techDocs"]:
-							manual = requests.get(item["techDocs"])
-							downloadable = True
-						else:
-							search_response = requests.get("http://www.ni.com" + item["techDocs"], timeout=5)
-							search_content = bs4.BeautifulSoup(search_response.content, "html.parser")
-							links = search_content.findAll("a")
-							for link in links:
-								if "User Manual and Specifications" in link.text or "User Guide" in link.text:
-									manual = requests.get(link["href"])
-									downloadable = True
-						if downloadable:
-							with open(item["modelName"] + ";Data.pdf", "wb") as f:
-								f.write(manual.content)
-						else:
-							print("Sorry, there's currently no datasheet on the website for "+controllerName+"!")
 		return CompactDAQController(metadata)
 
 
@@ -418,29 +307,14 @@ class CompactDAQ:
 				controllerDict = "".join(controllerDict)
 				controllerDict = controllerDict.split("var")[0]
 				controllerDict = "".join(controllerDict)
+				if "compactdaq-chassis" in item.a["href"]:
+					controllerDict = controllerDict[0:34280] + controllerDict[34281:]
 				d = json.loads(controllerDict)	# Creates dictionary of table info for current compactRIO Controller type
 				for item in d["tableItems"]:
 					if item["modelName"] == controllerName:
 						#print(d["attrHeadInfo"])
-						metadata = d
+						metadata = item
 						# print(item["modelName"])
-						downloadable = False
-						if "pdf" in item["techDocs"]:
-							manual = requests.get(item["techDocs"])
-							downloadable = True
-						else:
-							search_response = requests.get("http://www.ni.com" + item["techDocs"], timeout=5)
-							search_content = bs4.BeautifulSoup(search_response.content, "html.parser")
-							links = search_content.findAll("a")
-							for link in links:
-								if "User Manual and Specifications" in link.text or "User Guide" in link.text:
-									manual = requests.get(link["href"])
-									downloadable = True
-						if downloadable:
-							with open(item["modelName"] + ";Data.pdf", "wb") as f:
-								f.write(manual.content)
-						else:
-							print("Sorry, there's currently no datasheet on the website for "+controllerName+"!")
 		return CompactDAQChassis(metadata)
 
 
@@ -462,27 +336,118 @@ class CompactDAQ:
 				controllerDict = "".join(controllerDict)
 				controllerDict = controllerDict.split("var")[0]
 				controllerDict = "".join(controllerDict)
+				if "c-series-voltage-output" in item.a["href"]:
+					controllerDict = controllerDict[0:47376] + controllerDict[47377:]
 				d = json.loads(controllerDict)	# Creates dictionary of table info for current compactRIO Controller type
 				for item in d["tableItems"]:
 					if item["modelName"] == controllerName:
 						#print(d["attrHeadInfo"])
-						metadata = d
+						metadata = item
 						# print(item["modelName"])
-						downloadable = False
-						if "pdf" in item["techDocs"]:
-							manual = requests.get(item["techDocs"])
-							downloadable = True
-						else:
-							search_response = requests.get("http://www.ni.com" + item["techDocs"], timeout=5)
-							search_content = bs4.BeautifulSoup(search_response.content, "html.parser")
-							links = search_content.findAll("a")
-							for link in links:
-								if "User Manual and Specifications" in link.text or "User Guide" in link.text:
-									manual = requests.get(link["href"])
-									downloadable = True
-						if downloadable:
-							with open(item["modelName"] + ";Data.pdf", "wb") as f:
-								f.write(manual.content)
-						else:
-							print("Sorry, there's currently no datasheet on the website for "+controllerName+"!")
 		return CompactDAQModule(metadata)
+
+
+class MultifunctionIO:
+
+	def getController(self, controllerName):
+		metadata = None
+		controller_response = requests.get("http://www.ni.com/en-us/shop/select/multifunction-io-category",timeout=5)	# Creates list of pxi controller categories
+		controller_content =  bs4.BeautifulSoup(controller_response.content,"html.parser")
+		framework = controller_content.find_all("div", attrs={"class":"ni-product-name ni-margin-1x"})	# Gets all types of PXI Controllers
+		for item in framework:		# Iterates over types of PXI Controllers
+			#print(item.a.text)		#Prints type names
+			category = requests.get("http://www.ni.com/en-us/shop/select/"+item.a["href"],timeout=5)
+			if controllerName in category.text:
+				category_content = bs4.BeautifulSoup(category.content, "html.parser")
+				js_text = category_content.find_all('script')
+				count = 0
+				while "var pnTableItem = {" not in js_text[count].text:
+					count += 1
+				controllerDict = js_text[count].text.split("var pnTableItem = ")
+				controllerDict = "".join(controllerDict)
+				controllerDict = controllerDict.split("var")[0]
+				controllerDict = "".join(controllerDict)
+				#print(controllerDict[24513])
+				if "compactdaq-controller" in item.a["href"]:	# JSON breaks for this type for compactRIO Controllers (caused by extra comma at char 143087 of controllerDict)
+					controllerDict = controllerDict[0:24513] + controllerDict[24514:]
+				d = json.loads(controllerDict)	# Creates dictionary of table info for current compactRIO Controller type
+				for item in d["tableItems"]:
+					if item["modelName"] == controllerName:
+						#print(d["attrHeadInfo"])
+						metadata = item
+						# print(item["modelName"])
+		return CompactDAQController(metadata)
+
+
+	def getChassis(self, controllerName):
+		metadata = None
+		controller_response = requests.get("http://www.ni.com/en-us/shop/select/multifunction-io-category",timeout=5)	# Creates list of pxi controller categories
+		controller_content =  bs4.BeautifulSoup(controller_response.content,"html.parser")
+		framework = controller_content.find_all("div", attrs={"class":"ni-product-name ni-margin-1x"})	# Gets all types of PXI Controllers
+		for item in framework:		# Iterates over types of PXI Controllers
+			#print(item.a.text)		#Prints type names
+			category = requests.get("http://www.ni.com/en-us/shop/select/"+item.a["href"],timeout=5)
+			if controllerName in category.text:
+				category_content = bs4.BeautifulSoup(category.content, "html.parser")
+				js_text = category_content.find_all('script')
+				count = 0
+				while "var pnTableItem = {" not in js_text[count].text:
+					count += 1
+				controllerDict = js_text[count].text.split("var pnTableItem = ")
+				controllerDict = "".join(controllerDict)
+				controllerDict = controllerDict.split("var")[0]
+				controllerDict = "".join(controllerDict)
+				d = json.loads(controllerDict)	# Creates dictionary of table info for current compactRIO Controller type
+				for item in d["tableItems"]:
+					if item["modelName"] == controllerName:
+						#print(d["attrHeadInfo"])
+						metadata = item
+						# print(item["modelName"])
+		return CompactDAQChassis(metadata)
+
+
+	def getModule(self, controllerName):
+		metadata = None
+		controller_response = requests.get("http://www.ni.com/en-us/shop/select/multifunction-io-category",timeout=5)	# Creates list of pxi controller categories
+		controller_content =  bs4.BeautifulSoup(controller_response.content,"html.parser")
+		framework = controller_content.find_all("div", attrs={"class":"ni-product-name ni-margin-1x"})	# Gets all types of PXI Controllers
+		for item in framework:		# Iterates over types of PXI Controllers
+			#print(item.a.text)		#Prints type names
+			category = requests.get("http://www.ni.com/en-us/shop/select/"+item.a["href"],timeout=5)
+			if controllerName in category.text:
+				category_content = bs4.BeautifulSoup(category.content, "html.parser")
+				js_text = category_content.find_all('script')
+				count = 0
+				while "var pnTableItem = {" not in js_text[count].text:
+					count += 1
+				controllerDict = js_text[count].text.split("var pnTableItem = ")
+				controllerDict = "".join(controllerDict)
+				controllerDict = controllerDict.split("var")[0]
+				controllerDict = "".join(controllerDict)
+				d = json.loads(controllerDict)	# Creates dictionary of table info for current compactRIO Controller type
+				for item in d["tableItems"]:
+					if item["modelName"] == controllerName:
+						#print(d["attrHeadInfo"])
+						metadata = item
+						# print(item["modelName"])
+		return CompactDAQModule(metadata)
+
+
+def getDatasheet(item):
+	downloadable = False
+	if "pdf" in item["techDocs"]:
+		manual = requests.get(item["techDocs"])
+		downloadable = True
+	else:
+		search_response = requests.get("http://www.ni.com" + item["techDocs"], timeout=5)
+		search_content = bs4.BeautifulSoup(search_response.content, "html.parser")
+		links = search_content.findAll("a")
+		for link in links:
+			if "User Manual and Specifications" in link.text:
+				manual = requests.get(link["href"])
+				downloadable = True
+	if downloadable:
+		with open(item["modelName"] + ";Data.pdf", "wb") as f:
+			f.write(manual.content)
+	else:
+		print("Sorry, there's currently no datasheet on the website for " + item["modelName"] + "!")
